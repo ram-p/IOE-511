@@ -1,5 +1,5 @@
 % IOE 511/MATH 562, University of Michigan
-% Code written by: Batman
+% Code written by: Albert S. Berahas
 
 % Function that specifies general options. 
 % 

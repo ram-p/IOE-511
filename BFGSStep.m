@@ -1,27 +1,47 @@
-% Code to update the iterate using the BFGS algorithm
+% IOE 511/MATH 562, University of Michigan
+% Code written by: Shreyas Bhat
 
-function [x_new, f_new, g_new, Hest_new, d, alpha] = BFGSStep(x, f, g, Hest, problem, method, options, k)
+% Function that: (1) computes the Newton step; (2) updates the iterate; and, 
+%                (3) computes the function and gradient at the new iterate
+% 
+%           Inputs: x, f, g, H, problem, method, options
+%           Outputs: x_new, f_new, g_new, H_new, d, alpha
+%
+function [x_new,f_new,g_new, H_new,d,alpha, skipped] = BFGSStep(x,f,g,H,problem,method,options)
 
-% Search Direction
-d = -Hest*g;
+d = -H*g;
 
+% determine step size
 switch method.options.step_type
     case 'Backtracking'
-        abar = 1; tau = 0.5; c1 = 1e-4; eps = 1e-6; % Parameter initialization for backtracking line search and checking BFGS update
-        while (problem.compute_f(x + abar*d)) > (problem.compute_f(x) + c1*abar*g'*d)       % Condition to continue backtracking
-            abar = tau*abar;                        % Backtracking update
-        end
-        alpha = abar;                               % Set step size when the Armijo condition has been satisfied
-        x_new = x + alpha*d;                        % Iterate update    
-        f_new = problem.compute_f(x_new);           % New function value
-        g_new = problem.compute_g(x_new);           % New gradient value
-        s = x_new - x; y = g_new - g;
-        if s'*y < eps*norm(s)*norm(y)
-            Hest_new = Hest;
-%             disp("Skipped at iteration " + k)
-        else
-            I = eye(problem.n);
-            Hest_new = (I - (s*y')/(s'*y))*Hest*(I - (y*s')/(s'*y)) + (s*s')/(s'*y);
+        alpha_bar = options.alpha_bar;
+        rho = options.rho;
+        c1 = options.c1;
+        alpha = alpha_bar;
+        while problem.compute_f(x+alpha*d) > f + c1*alpha*g'*d
+           fval = problem.compute_f(x+alpha*d);
+           rhs = f + c1*alpha*g'*d;
+           alpha = alpha*rho;
         end
 end
+        
+    x_new = x+alpha*d;
+    f_new = problem.compute_f(x_new);
+    g_new = problem.compute_g(x_new);
+
+    s_new = x_new - x;
+    y_new = g_new - g;
+    
+    inner_prod = s_new'*y_new;
+
+    if inner_prod <= options.eps * norm(s_new) * norm(y_new)
+        H_new = H;
+        skipped = true;
+    else
+        skipped = false;
+        I_ = eye(length(x));
+        V = (I_ - s_new * y_new'/inner_prod);
+        H_new = V * H * V' + s_new * s_new' / inner_prod;
+    end
 end
+

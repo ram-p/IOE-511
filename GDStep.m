@@ -1,5 +1,5 @@
 % IOE 511/MATH 562, University of Michigan
-% Code written by: Batman
+% Code written by: Shreyas Bhat
 
 % Function that: (1) computes the GD step; (2) updates the iterate; and, 
 %                (3) computes the function and gradient at the new iterate
@@ -14,20 +14,24 @@ d = -g;
 
 % determine step size
 switch method.options.step_type
+    % Known constant step size
     case 'Constant'
-        alpha = method.options.constant_step_size;  % Constant step size specified
-        x_new = x + alpha*d;                        % Iterate update
-        f_new = problem.compute_f(x_new);           % New function value
-        g_new = problem.compute_g(x_new);           % New gradient value
-        
+        alpha = method.options.constant_step_size;
+
+   % Armijo Backtracking to get a good step size
     case 'Backtracking'
-        abar = 1; tau = 0.5; c1 = 1e-4;             % Parameter initialization for backtracking line search
-        while (problem.compute_f(x + abar*d)) > (problem.compute_f(x) + c1*abar*g'*d)       % Condition to continue backtracking
-            abar = tau*abar;                        % Backtracking update
+        alpha_bar = options.alpha_bar;
+        rho = options.rho;
+        c1 = options.c1;
+        alpha = alpha_bar;
+        while problem.compute_f(x+alpha*d) > f + c1*alpha*g'*d
+           alpha = alpha*rho;
         end
-        alpha = abar;                               % Set step size when the Armijo condition has been satisfied
-        x_new = x + alpha*d;                        % Iterate update    
-        f_new = problem.compute_f(x_new);           % New function value
-        g_new = problem.compute_g(x_new);           % New gradient value
 end
+
+% Get the new values
+x_new = x+alpha*d;
+f_new = problem.compute_f(x_new);
+g_new = problem.compute_g(x_new);
 end
+

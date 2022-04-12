@@ -36,19 +36,20 @@ addpath(genpath('Functions'))
 addpath(genpath('Methods'))
 
 % set problem (minimal requirement: name of problem)
-problem.name = 'P7_Rosenbrock_2';
-problem.x0 = [-1.2; ones(1, 1)];
-problem.n = length(problem.x0);
-
-% problem.name = 'P1_quad_10_10';
-% rng(0); x0 = 20*rand(10,1)-10;
-% problem.x0 = x0;
+% problem.name = 'P7_Rosenbrock_2';
+% problem.x0 = [-1.2; ones(1, 1)];
 % problem.n = length(problem.x0);
 
+problem.name = 'P1_quad_10_10';
+rng(0); x0 = 20*rand(10,1)-10;
+problem.x0 = x0;
+problem.n = length(problem.x0);
+
 % set method (minimal requirement: name of method)
-method.name = 'TRNewtonCG';
+% method.name = 'TRNewtonCG';
+method.name = 'Newton';
 % method.name = 'TRSR1CG';
-% method.options.step_type = 'Wolfe';
+method.options.step_type = 'Wolfe';
 method.options.delta = delta_0;
 
 % set options

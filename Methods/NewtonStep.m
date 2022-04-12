@@ -11,7 +11,7 @@ function [x_new,f_new,g_new,H_new,d,alpha] = NewtonStep(x,f,g,H,problem,method,o
 
 % Algorithm to compute modified search direction using H + eta.I
 beta = 1e-6;                        % Beta
-R = CholSub(problem.n, H, beta);               % Returning the result of factorizing H + eta.I
+R = CholeskySubroutine(H, beta);               % Returning the result of factorizing H + eta.I
 % Search direction d = -(R'R)\g;
 d = -R\(R'\g);
 

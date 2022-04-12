@@ -6,7 +6,7 @@
 %           Input: x
 %           Output: g = nabla f(x)
 %
-function g = rosen_grad(x)
+function g = rosenbrock_2_grad(x)
 
 g = [(2*x(1) - 2 - 400*x(1)*(x(2) - x(1)^2)); 
     200*(x(2) - x(1)^2)];

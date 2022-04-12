@@ -6,7 +6,7 @@
 %           Input: x
 %           Output: f(x)
 %
-function [f] = rosen_func(x)
+function [f] = rosenbrock_2_func(x)
 
 f = (1 - x(1))^2 + 100*(x(2) - x(1)^2)^2;
 

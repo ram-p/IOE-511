@@ -1,7 +1,7 @@
 % Function to produce a final plot of f(x_k) - f* vs iterations k
 
 function gradPlot(gplot, k)
-    figure(2)
+    figure
     set(gcf, 'DefaultLineLineWidth', 2)
     % The actual plot command
     semilogy(1:k, gplot(1:k))

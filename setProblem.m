@@ -14,19 +14,19 @@
 function [problem] = setProblem(problem)
 
 % check is problem name available
-if ~isfield(problem,'name')
-    error('Problem name not defined!!!')
+if ~isfield(problem,'name') || ~isfield(problem, 'x0')
+    error('Provide both problem name and starting point!!!')
 end
 
 % set function handles according the the selected problem
 switch problem.name
         
-    case 'Rosenbrock'
+    case 'P7_Rosenbrock_2'
+        problem.compute_f = @rosenbrock_2_func;
+        problem.compute_g = @rosenbrock_2_grad;
+        problem.compute_H = @rosenbrock_2_Hess;
+        problem.fstar = 0;
         
-        problem.compute_f = @rosen_func;
-        problem.compute_g = @rosen_grad;
-        problem.compute_H = @rosen_Hess;
-
     case 'Quadratic'
         if ~isfield(problem,'A')
             error('Data matrix A not defined')
@@ -39,19 +39,14 @@ switch problem.name
         problem.compute_f = @(x)quad_func(problem.A, problem.b, problem.c, x);
         problem.compute_g = @(x)quad_grad(problem.A, problem.b, x);
         problem.compute_H = @(x)quad_Hess(problem.A, x);
-    
-    case 'Function2'
-        
-        problem.compute_f = @func2_func;
-        problem.compute_g = @func2_grad;
-        problem.compute_H = @func2_Hess;
 
-    case 'Function3'
+    case 'P8_Rosenbrock_100'
         
-        problem.compute_f = @func3_func;
-        problem.compute_g = @func3_grad;
-        problem.compute_H = @func3_Hess;
-        
+        problem.compute_f = @rosenbrock_100_func;
+        problem.compute_g = @rosenbrock_100_grad;
+        problem.compute_H = @rosenbrock_100_Hess;
+        problem.fstar = 0;
+            
     otherwise
         
         error('Problem not defined!!!')

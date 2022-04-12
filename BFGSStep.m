@@ -19,29 +19,28 @@ switch method.options.step_type
         c1 = options.c1;
         alpha = alpha_bar;
         while problem.compute_f(x+alpha*d) > f + c1*alpha*g'*d
-           fval = problem.compute_f(x+alpha*d);
-           rhs = f + c1*alpha*g'*d;
            alpha = alpha*rho;
         end
 end
-        
-    x_new = x+alpha*d;
-    f_new = problem.compute_f(x_new);
-    g_new = problem.compute_g(x_new);
 
-    s_new = x_new - x;
-    y_new = g_new - g;
-    
-    inner_prod = s_new'*y_new;
+x_new = x+alpha*d;
+f_new = problem.compute_f(x_new);
+g_new = problem.compute_g(x_new);
 
-    if inner_prod <= options.eps * norm(s_new) * norm(y_new)
-        H_new = H;
-        skipped = true;
-    else
-        skipped = false;
-        I_ = eye(length(x));
-        V = (I_ - s_new * y_new'/inner_prod);
-        H_new = V * H * V' + s_new * s_new' / inner_prod;
-    end
+s_new = x_new - x;
+y_new = g_new - g;
+
+inner_prod = s_new'*y_new;
+
+if inner_prod <= options.eps * norm(s_new) * norm(y_new)
+    H_new = H;
+    skipped = true;
+else
+    skipped = false;
+    I_ = eye(length(x));
+    V = (I_ - s_new * y_new'/inner_prod);
+    H_new = V * H * V' + s_new * s_new' / inner_prod;
+end
+
 end
 

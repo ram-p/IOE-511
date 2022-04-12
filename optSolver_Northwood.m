@@ -4,7 +4,7 @@
 % Function that runs a chosen algorithm on a chosen problem
 %           Inputs: problem, method, options (structs)
 %           Outputs: final iterate (x) and final function value (f)
-function [x,f] = optSolver_Padmanabhan_Ram(problem,method,options)
+function [x,f] = optSolver_Northwood(problem,method,options)
 
 % set problem, method and options
 [problem] = setProblem(problem);
@@ -42,6 +42,10 @@ while (k < options.max_iterations) && (norm_g > options.term_tol*max(1, norm_g_o
             [x_new, f_new, g_new, Hest_new, d, alpha] = BFGSStep(x, f, g, Hest, problem, method, options, k);
             % Update Hessian estimate now, as it's specific to BFGS
             Hest_old = Hest; Hest = Hest_new;
+        case 'DFP'
+            [x_new, f_new, g_new, Hest_new, d, alpha] = DFPStep(x, f, g, Hest, problem, method, options, k);
+            % Update Hessian estimate now, as it's specific to DFP
+            Hest_old = Hest; Hest = Hest_new;
         otherwise
             error('Method not implemented yet!')
     end
@@ -60,8 +64,7 @@ end
 
 % Function for plotting gradient norm vs iterations
 gradPlot(gplot, k);
-% Function for plotting optimality gap vs iterations
-% Uncomment only if applicable.
-% optPlot(fplot, fstar, k);
+% Function for plotting optimality gap vs iterations. Uncomment only if applicable.
+optPlot(fplot, fstar, k);
 
 end

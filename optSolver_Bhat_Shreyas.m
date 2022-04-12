@@ -50,10 +50,6 @@ while k < options.max_iterations && norm_g >= options.term_tol * term_constant
         case 'GradientDescent'
             [x_new,f_new,g_new,d,alpha] = GDStep(x,f,g,problem,method,options);
         case 'Newton'
-            [x_new,f_new,g_new,H_new,d,alpha] = NewtonStep(x,f,g,H,problem,method,options);
-            H_old = H;
-            H = H_new;
-        case 'ModifiedNewton'
             [x_new,f_new,g_new,H_new,d,alpha,modified] = ModifiedNewtonStep(x,f,g,H,problem,method,options);
             H_old = H;
             H = H_new;
@@ -72,21 +68,7 @@ while k < options.max_iterations && norm_g >= options.term_tol * term_constant
                 skipped_counter = skipped_counter + 1;
                 skipped_iters = [skipped_iters, k];
             end
-            
-        case 'LBFGS'
-            if k == 0
-                r = g;
-                sks = [];
-                yks = [];
-            end
-            [x_new, f_new, g_new, r_new, sks_new, yks_new, alpha] = LBFGSStep(x, f, g, r, sks, yks, problem, method, options);
-            sks_old = sks;
-            yks_old = yks;
-            yks = yks_new;
-            sks = sks_new;
-            r_old = r;
-            r = r_new;
-        otherwise
+         otherwise
             error('Method not implemented yet!')            
     end
     

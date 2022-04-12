@@ -6,7 +6,7 @@
 %           Input: x
 %           Output: H = nabla^2 f(x)
 %
-function [H] = rosen_Hess(x)
+function [H] = rosenbrock_2_Hess(x)
 
 H = [1200*x(1)^2 - 400*x(2) + 2    -400*x(1);  
     -400*x(1)                       200];

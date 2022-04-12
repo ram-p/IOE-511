@@ -8,19 +8,19 @@ close all
 clear
 clc
 
+format compact
+
 addpath(genpath('Functions'))
+addpath(genpath('Methods'))
 
 % set problem (minimal requirement: name of problem)
-problem.name = 'Rosenbrock';
-problem.x0 = [-1.2; 1];
-% problem.x0 = load('quadratic2.mat').x_0;
-% problem.x0 = load('quadratic10.mat').x_0;
+problem.name = 'P7_Rosenbrock_2';
+problem.x0 = [-1.2; ones(1, 1)];
 problem.n = length(problem.x0);
 
 % set method (minimal requirement: name of method)
-method.name = 'GradientDescent';
-method.options.step_type = 'Backtracking';
-method.options.constant_step_size = 1e-3;
+method.name = 'Newton';
+method.options.step_type = 'Wolfe';
 
 % set options
 options.term_tol = 1e-6;
@@ -28,5 +28,5 @@ options.max_iterations = 1e3;
 
 % run method and return x^* and f^*
 tic
-[x,f] = optSolver_Padmanabhan_Ram(problem, method, options);
+[x,f] = optSolver_Northwood(problem, method, options)
 toc

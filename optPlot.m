@@ -1,7 +1,7 @@
 % Function to produce a final plot of f(x_k) - f* vs iterations k
 
 function optPlot(fplot, fstar, k)
-    figure(1)
+    figure
     set(gcf, 'DefaultLineLineWidth', 2)
     % The actual plot command
     semilogy(1:k, (fplot(1:k)-fstar))

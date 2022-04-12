@@ -20,7 +20,7 @@ if rho > options.c_1_tr
     g_new = problem.compute_g(x_new);
     s = d_k;
     y = g_new - g;
-    H_new = H + (y - H*s)*(y - H*s).' / ((y - Hs).' * s);
+    H_new = H + (y - H*s)*(y - H*s).' / ((y - H*s).' * s);
 
     if rho > options.c_2_tr
         delta = 2 * delta;

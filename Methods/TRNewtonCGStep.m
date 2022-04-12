@@ -8,7 +8,7 @@
 %   Outputs: the inputs computed at the new point after Newton TR CG step
 
 
-function [x_new, f_new, g_new, H_new, delta] = TRNewtonCGStep(x,f,g,H,delta,problem,method,options)
+function [x_new, f_new, g_new, H_new, delta] = TRNewtonCGStep(x,f,g,H,delta,problem,method,options,k)
 
 d_k = CGSubSolver(g, H, delta, options.term_tol_CG);
 model = @(d) f + g.'*d + 0.5 * d.' * H * d;
@@ -24,6 +24,7 @@ if rho > options.c_1_tr
         delta = 2 * delta;
     end
 else
+%     disp("Skipped at iteration " + k)
     x_new = x;
     f_new = f;
     g_new = g;

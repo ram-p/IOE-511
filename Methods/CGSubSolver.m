@@ -31,7 +31,7 @@ while true
         prod1 = p.' * z;
         prod2 = p.'*p;
         prod3 = z.'*z;
-        tau = (sqrt(prod1^2 + prod2*(delta_k^2 - prod3)) - 2*prod1)/2*prod2;
+        tau = (sqrt(prod1^2 + prod2*(delta_k^2 - prod3)) - prod1)/prod2;
         d_k = z+tau*p;
         return;
     end

@@ -23,7 +23,7 @@ c1_tr = 1e-3;
 c2_tr = 0.5;
 term_tol_CG = 1e-6;
 max_iterations_CG = 1000;
-delta_0 = 1.0;
+delta_0 = 1.
 
 % Add paths with the functions
 addpath(genpath('./Functions'))
@@ -40,16 +40,10 @@ problem.name = 'P7_Rosenbrock_2';
 problem.x0 = [-1.2; ones(1, 1)];
 problem.n = length(problem.x0);
 
-% problem.name = 'P1_quad_10_10';
-% rng(0); x0 = 20*rand(10,1)-10;
-% problem.x0 = x0;
-% problem.n = length(problem.x0);
-
 % set method (minimal requirement: name of method)
 method.name = 'TRNewtonCG';
-% method.name = 'TRSR1CG';
 % method.options.step_type = 'Wolfe';
-method.options.delta = delta_0;
+method.options.delta = 1.0;
 
 % set options
 options.term_tol = term_tol;
@@ -59,13 +53,7 @@ options.rho = rho;
 options.c1 = c1;
 options.beta = beta;
 options.eps = eps;
-options.track = false;
-options.c_1_tr = c1_tr;
-options.c_2_tr = c2_tr;
-options.term_tol_CG = term_tol_CG;
-
-% NOT CURRENTLY USED. MIGHT HAVE TO USE THIS IN THE SOLVER
-options.max_iterations_CG = max_iterations_CG;
+options.track = true;
 
 tic
 [x,f] = optSolver_Northwood(problem, method, options);

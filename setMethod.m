@@ -9,7 +9,7 @@
 % Error(s): 
 %   (1) if method not specified
 % Warning(s)
-%   (1) if method is LBFGS and memory length is uspecified
+%   (1) if method is a trust region method and radius is unspecified
 function [method] = setMethod(method)
 
 % check is method name specified
@@ -18,12 +18,15 @@ if ~isfield(method,'name')
 end
 
 switch method.name
-    case 'LBFGS'
-        if ~isfield(method.options, 'mem')
-            warning('Memory length not sepcified, defaulting to 5 pairs')
-            method.options.mem = 5;
+    case 'TRNewtonCG'
+        if ~isfield(method.options, 'delta')
+            warning('Initial trust region radius not specified, defaulting to 1')
+            method.options.delta = 1.0;
         end
-%         % Initialize the memory
-%         method.sks = [];
-%         method.yks = [];
+    case 'TRSR1CG'
+        if ~isfield(method.options, 'delta')
+            warning('Initial trust region radius not specified, defaulting to 1')
+            method.options.delta = 1.0;
+        end
+        
 end

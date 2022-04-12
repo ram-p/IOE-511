@@ -28,10 +28,11 @@ switch problem.name
         problem.fstar = 0;
         
     case 'P1_quad_10_10'
-        problem.compute_f = @quad_10_10_func;
-        problem.compute_g = @quad_10_10_grad;
-        problem.compute_H = @quad_10_10_Hess;
-        problem.fstar = -68;
+ 
+        
+        problem.compute_f = @(x)quad_func(problem.A, problem.b, problem.c, x);
+        problem.compute_g = @(x)quad_grad(problem.A, problem.b, x);
+        problem.compute_H = @(x)quad_Hess(problem.A, x);
 
     case 'P8_Rosenbrock_100'
         

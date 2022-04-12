@@ -21,7 +21,6 @@ Hest = eye(problem.n);
 norm_g = norm(g,inf);
 norm_g_0 = norm_g;
 term_constant = max(1, norm_g_0);
-delta = method.options.delta;
 
 % set initial iteration counter
 k = 0;
@@ -30,7 +29,7 @@ fplot = zeros(1, options.max_iterations);
 % Initialize a vector gplot which takes the value of the norm of gradient at each iteration
 gplot = zeros(1, options.max_iterations);
 
-while (k < options.max_iterations) && (norm_g > options.term_tol * term_constant)    % Termination condition - theoretical and patience
+while (k < options.max_iterations) && (norm_g > options.term_tol *term_constant)    % Termination condition - theoretical and patience
     
     % take step according to a chosen method
     switch method.name
@@ -47,12 +46,6 @@ while (k < options.max_iterations) && (norm_g > options.term_tol * term_constant
         case 'DFP'
             [x_new, f_new, g_new, Hest_new, d, alpha] = DFPStep(x, f, g, Hest, problem, method, options, k);
             % Update Hessian estimate now, as it's specific to DFP
-            Hest_old = Hest; Hest = Hest_new;
-        case 'TRNewtonCG'
-            [x_new, f_new, g_new, H_new, delta] = TRNewtonCGStep(x, f, g, H, delta, problem, method, options);
-            H_old = H; H = H_new;
-        case 'TRSR1CG'
-            [x_new, f_new, g_new, Hest_new, delta] = TRSR1CGStep(x, f, g, Hest, delta, problem, method, options);
             Hest_old = Hest; Hest = Hest_new;
         otherwise
             error('Method not implemented yet!')

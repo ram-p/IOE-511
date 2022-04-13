@@ -29,20 +29,27 @@ switch method.options.step_type
         end
         
     case 'Wolfe'
-        abar = 1; c1 = 1e-4; c2 = 0.9; alow = 0; ahi = 1000; c = 0.5;       % Parameters for the weak Wolfe line search
+%         abar = 1; c1 = 1e-4; c2 = 0.9; alow = 0; ahi = 1000; c = 0.5; eps = 1e-6;       % Parameters for the weak Wolfe line search
+        alpha_bar = options.alpha_bar;
+        c1 = options.c1;
+        c2 = options.c2;
+        alow = options.alow;
+        ahi = options.ahi;
+        c = options.c;
+        
+        alpha = alpha_bar;
         while true
-            if (problem.compute_f(x + abar*d)) <= (problem.compute_f(x) + c1*abar*g'*d)
-                if (problem.compute_g(x + abar*d)'*d >= c2*problem.compute_g(x)'*d)
-                    alpha = abar;
+            if (problem.compute_f(x + alpha*d)) <= f + c1*alpha*g'*d)
+                if (problem.compute_g(x + alpha*d)'*d >= c2*g'*d)
                     break
                 end
             end
-            if (problem.compute_f(x + abar*d)) <= (problem.compute_f(x) + c1*abar*g'*d)
-                alow = abar;
+            if (problem.compute_f(x + alpha*d)) <= (f + c1*alpha*g'*d)
+                alow = alpha;
             else
-                ahi = abar;
+                ahi = alpha;
             end
-            abar = c*alow + (1-c)*ahi;
+            alpha = c*alow + (1-c)*ahi;
         end
 end
 

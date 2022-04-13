@@ -46,8 +46,8 @@ problem.x0 = x0;
 problem.n = length(problem.x0);
 
 % set method (minimal requirement: name of method)
-% method.name = 'TRNewtonCG';
-method.name = 'Newton';
+method.name = 'TRNewtonCG';
+% method.name = 'Newton';
 % method.name = 'TRSR1CG';
 method.options.step_type = 'Wolfe';
 method.options.delta = delta_0;

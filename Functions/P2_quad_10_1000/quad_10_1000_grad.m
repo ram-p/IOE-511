@@ -9,17 +9,7 @@
 %                      kappa = 1000
 
 % function that computes the function value of the quad_10_10 function
-function [g] = quad_10_1000_grad(x)
-
-% Set random number generator seeds
-rng(0);
-
-% Generate random data
-q = randn(10,1);
-% MATLAB sprandsym function. Inputs: n, density, reciprocal of the 
-% condition number, and kind 
-% (see https://www.mathworks.com/help/matlab/ref/sprandsym.html)
-Q = sprandsym(10,0.5,1e-3,1);
+function [g] = quad_10_1000_grad(x, Q, q)
 
 % compute function value
 g = Q*x + q;

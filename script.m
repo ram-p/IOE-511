@@ -12,8 +12,8 @@ addpath(genpath('Functions'))
 addpath(genpath('Methods'))
 
 % Set problem name and initial condition.
-problem.name = 'P1_quad_10_10';
-rng(0); problem.x0 = 20*rand(10, 1) - 10;
+problem.name = 'P4_quad_1000_1000';
+rng(0); problem.x0 = 20*rand(1000, 1) - 10;
 problem.n = length(problem.x0);
 
 % Set method to solve the given problem.
@@ -35,5 +35,5 @@ options.delta = 1;
 
 % Run the solver to return x*, f* and the CPU computation time in seconds.
 tic
-[x,f] = optSolver_Northwood(problem, method, options)
+[x,f] = optSolver_Northwood(problem, method, options);
 toc

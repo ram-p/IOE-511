@@ -7,9 +7,9 @@
 
 function [d_k] = CGSubSolver(g_k, B_k, delta_k, term_tol)
 
-z = zeros(size(g_k));
-r = g_k;
-p = -r;
+z = zeros(size(g_k));        % Initialize z to be a zero vector same shape as gradient
+r = g_k;                     % Initialize r to be the gradient
+p = -r;                      % Initialize p
 
 if norm(r) < term_tol
     d_k = z;

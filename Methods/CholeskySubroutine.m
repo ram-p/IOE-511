@@ -5,7 +5,8 @@
 
 function R = CholeskySubroutine(n, H, beta)
 
-flag = 1;   % Initializing flag to check if Cholesky is completed successfully
+
+[R, flag] = chol(H); % Initializing flag to check if Cholesky is completed successfully
 
 % If-else-endif statements to initialize eta
 if min(diag(H)) > 0

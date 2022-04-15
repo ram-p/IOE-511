@@ -1,6 +1,6 @@
 % Code that computes Hessian for the data-fit function
 
-function H = datafit_Hess(x)
+function H = datafit_2_Hess(x)
     y = [1.5; 2.25; 2.625];
     H = [0 0; 0 0];
     for i = 1:length(y)

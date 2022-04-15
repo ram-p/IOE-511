@@ -1,23 +1,18 @@
-% IOE 511/MATH 562, University of Michigan
-% Code written by: Batman
-
 % Function that specifies general options. 
-% 
-%           Input: options (struct)
-%           Output: options (struct)
-%
-% Warning(s):
-%   (1) if tolerance and maximum iterations not specified
-%
+% Input: options (struct).
+% Output: options (struct).
+% Warning: If tolerance and maximum iterations not specified.
+% Code written by Northwood Team.
+
 function [options] = setOptions(options)
 
-% check if termination tolerance specified
+% Check if termination tolerance is specified.
 if ~isfield(options,'term_tol')
     warning('Termination tolerance not specified!!! Setting to default: 1e-6')
     options.term_tol = 1e-6;
 end
 
-% check if max iterations specified
+% Check if max iterations is specified
 if ~isfield(options,'max_iterations')
     warning('Maximum iterations not specified!!! Setting to default: 1e2')
     options.max_iterations = 1e2;

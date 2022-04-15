@@ -1,6 +1,6 @@
 % Code that computes gradient for the data-fit function
 
-function g = datafit_grad(x)
+function g = datafit_2_grad(x)
     y = [1.5; 2.25; 2.625];
     g = [0; 0];
     for i = 1:length(y)

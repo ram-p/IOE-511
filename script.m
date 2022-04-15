@@ -1,32 +1,39 @@
-% IOE 511/MATH 562, University of Michigan
-% Code written by: Batman
+% Main script file to run code.
+% Code written by Northwood Team.
 
-% Script to run code
-
-% close all figures, clear all variables from workspace and clear command window
+% Close all figures, clear all variables from workspace, clear the command window and improve appearance.
 close all
 clear
 clc
-
 format compact
 
+% Add required folders to the current Matlab path.
 addpath(genpath('Functions'))
 addpath(genpath('Methods'))
 
-% set problem (minimal requirement: name of problem)
-problem.name = 'P7_Rosenbrock_2';
-problem.x0 = [-1.2; ones(1, 1)];
+% Set problem name and initial condition.
+problem.name = 'P1_quad_10_10';
+rng(0); problem.x0 = 20*rand(10, 1) - 10;
 problem.n = length(problem.x0);
 
-% set method (minimal requirement: name of method)
-method.name = 'Newton';
+% Set method to solve the given problem.
+method.name = 'BFGS';
 method.options.step_type = 'Wolfe';
 
-% set options
+% Set different constants.
 options.term_tol = 1e-6;
 options.max_iterations = 1e3;
+options.c1_ls = 1e-4;
+options.c2_ls = 0.9;
+options.c1_tr = 1e-3;
+options.c2_tr = 0.5;
+options.term_tol_CG = 1e-6;
+options.max_iterations_CG = 1e3;
+options.beta = 1e-6;
+options.eps = 1e-6;
+options.delta = 1;
 
-% run method and return x^* and f^*
+% Run the solver to return x*, f* and the CPU computation time in seconds.
 tic
 [x,f] = optSolver_Northwood(problem, method, options)
 toc

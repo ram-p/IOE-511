@@ -22,6 +22,6 @@ q = randn(1000,1);
 Q = sprandsym(1000,0.5,1e-3,1);
 
 % compute function value
-g = Q*x + q;
+H = Q;
 
 end

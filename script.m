@@ -17,13 +17,13 @@ rng(0); problem.x0 = 20*rand(1000, 1) - 10;
 problem.n = length(problem.x0);
 
 % Set method to solve the given problem.
-method.name = 'BFGS';
+method.name = 'DFP';
 method.options.step_type = 'Wolfe';
 
 % Set different constants.
 options.term_tol = 1e-6;
 options.max_iterations = 1e3;
-options.c1_ls = 1e-4;
+options.c1_ls = 1e-3;
 options.c2_ls = 0.9;
 options.c1_tr = 1e-3;
 options.c2_tr = 0.5;

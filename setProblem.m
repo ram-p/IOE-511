@@ -21,41 +21,23 @@ switch problem.name
         problem.compute_g = @quad_10_10_grad;
         problem.compute_H = @quad_10_10_Hess;
     case 'P2_quad_10_1000'
-        % Set random number generator seeds
-        rng(0);
-
-        % Generate random data
-        q = randn(10,1);
-        % MATLAB sprandsym function. Inputs: n, density, reciprocal of the 
-        % condition number, and kind 
-        % (see https://www.mathworks.com/help/matlab/ref/sprandsym.html)
-        Q = sprandsym(10,0.5,1e-3,1);
-
-        problem.compute_f = @(x)quad_10_1000_func(x, Q, q);
-        problem.compute_g = @(x)quad_10_1000_grad(x, Q, q);
-        problem.compute_H = @(x)quad_10_1000_Hess(x, Q);
+        problem.compute_f = @quad_10_1000_func;
+        problem.compute_g = @quad_10_1000_grad;
+        problem.compute_H = @quad_10_1000_Hess;
     case 'P3_quad_1000_10'
-        % Set random number generator seeds
         rng(0);
-        % Generate random data
         q = randn(1000,1);
         Q = sprandsym(1000,0.5,0.1,1);
-
-        problem.compute_f = @(x)quad_1000_10_func(x, Q, q);
-        problem.compute_g = @(x)quad_1000_10_grad(x, Q, q);
-        problem.compute_H = @(x)quad_1000_10_Hess(x, Q);
+        problem.compute_f = @(x) quad_1000_10_func(x, Q, q);
+        problem.compute_g = @(x) quad_1000_10_grad(x, Q, q);
+        problem.compute_H = @(x) quad_1000_10_Hess(x, Q, q);
     case 'P4_quad_1000_1000'
-        % Set random number generator seeds
         rng(0);
-
-        % Generate random data
         q = randn(1000,1);
         Q = sprandsym(1000,0.5,1e-3,1);
-
-        problem.compute_f = @(x)quad_1000_1000_func(x, Q, q);
-        problem.compute_g = @(x)quad_1000_1000_grad(x, Q, q);
-        problem.compute_H = @(x)quad_1000_1000_Hess(x, Q);
-
+        problem.compute_f = @(x) quad_1000_1000_func(x, Q, q);
+        problem.compute_g = @(x) quad_1000_1000_grad(x, Q, q);
+        problem.compute_H = @(x) quad_1000_1000_Hess(x, Q, q);
     case 'P5_Quartic_1'
         problem.compute_f = @quartic_1_func;
         problem.compute_g = @quartic_1_grad;

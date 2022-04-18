@@ -9,7 +9,7 @@
 %                      kappa = 10
 
 % function that computes the function value of the quad_10_10 function
-function [H] = quad_1000_10_Hess(x, Q)
+function [H] = quad_1000_10_Hess(x, Q, q)
 
 % compute function value
 H = Q;

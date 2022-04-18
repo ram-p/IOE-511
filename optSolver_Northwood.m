@@ -22,13 +22,13 @@ end
 
 Hest = eye(problem.n);              % Initial Hessian estimate
 norm_g = norm(g,inf);               % Gradient norm
-norm_g_old = norm_g;
+norm_g_init = norm_g;
 
 k = 0;                                      % Initial iteration counter
 fplot = zeros(1, options.max_iterations);   % Initializing a vector to take in function values over iterations
 gplot = zeros(1, options.max_iterations);   % Initializing a vector to take in gradient norm values over iterations
 
-while (k < options.max_iterations) && (norm_g > options.term_tol*max(1, norm_g_old))    % Termination condition
+while (k < options.max_iterations) && (norm_g > options.term_tol*max(1, norm_g_init))    % Termination condition
     % Take a step based on the chosen method.
     switch method.name
         case 'GradientDescent'
@@ -57,7 +57,7 @@ while (k < options.max_iterations) && (norm_g > options.term_tol*max(1, norm_g_o
             error('Method not implemented yet!')
     end
     % Update old and new iterates, function values, gradients and gradient norms.
-    x_old = x; f_old = f; g_old = g; norm_g_old = norm_g;
+    x_old = x; f_old = f; g_old = g; norm_g_old = norm_g
     x = x_new; f = f_new; g = g_new; norm_g = norm(g,inf);
     fplot(k+1) = f_old;         % Append the function value to the fplot vector.
     gplot(k+1) = norm_g_old;    % Append the gradient norm to the gplot vector.

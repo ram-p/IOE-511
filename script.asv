@@ -45,31 +45,18 @@ addpath(genpath('Methods'))
 % problem.x0(1) = -1.2;
 % problem.n = length(problem.x0);
 
-% problem.name = 'P9_DataFit_2';
-% problem.x0 = [1; 1];
-% problem.n = length(problem.x0);
-
-% problem.name = 'P10_Exponential_10';
-% problem.x0 = zeros(10, 1); problem.x0(1) = 1;
-% problem.n = length(problem.x0);
-
-% problem.name = 'P11_Exponential_100';
-% problem.x0 = zeros(100, 1); problem.x0(1) = 1;
-% problem.n = length(problem.x0);
-
-problem.name = 'P12_Genhumps_5';
-problem.x0 = 506.2 * ones(5, 1); problem.x0(1) = -problem.x0(1);
+problem.name = 'P9_DataFit_2';
+problem.x0 = [1; 1];
 problem.n = length(problem.x0);
-
 
 % Set method to solve the given problem.
 % method.name = 'GradientDescent';
 % method.name = 'Newton';
 % method.name = 'BFGS';
-method.name = 'DFP';
-% method.name = 'TRNewtonCG';
+% method.name = 'DFP';
+method.name = 'TRNewtonCG';
 % method.name = 'TRSR1CG';
-method.options.step_type = 'Wolfe';
+% method.options.step_type = 'Wolfe';
 % method.options.step_type = 'Backtracking';
 
 % Set different constants.
@@ -83,10 +70,10 @@ options.term_tol_CG = 1e-6;
 options.max_iterations_CG = 1e3;
 options.beta = 1e-6;
 options.eps = 1e-6;
-options.delta = 10;
+
 
 % Delta for Datafit
-% options.delta = 0.1;
+options.delta = 0.1;
 
 % Run the solver to return x*, f* and the CPU computation time in seconds.
 tic

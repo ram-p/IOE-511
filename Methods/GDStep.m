@@ -44,7 +44,7 @@ switch method.options.step_type
             end
             % Set low and high thresholds for abar, depending on whether the first condition is satisfied.
             num_func_evals = num_func_evals + 1;
-            if (problem.compute_f(x + abar*d)) <= (problem.compute_f(x) + c1*abar*g'*d)
+            if (problem.compute_f(x + abar*d)) <= (f + c1*abar*g'*d)
                 alow = abar;
             else
                 ahi = abar;

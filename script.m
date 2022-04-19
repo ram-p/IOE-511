@@ -36,9 +36,9 @@ addpath(genpath('Methods'))
 % theta = 7*pi/18; problem.x0 = [cos(theta); sin(theta); cos(theta); sin(theta)];
 % problem.n = length(problem.x0);
 
-% problem.name = 'P7_Rosenbrock_2';
-% problem.x0 = [-1.2; 1];
-% problem.n = length(problem.x0);
+problem.name = 'P7_Rosenbrock_2';
+problem.x0 = [-1.2; 1];
+problem.n = length(problem.x0);
 
 % problem.name = 'P8_Rosenbrock_100';
 % problem.x0 = ones(100, 1);
@@ -57,9 +57,9 @@ addpath(genpath('Methods'))
 % problem.x0 = zeros(100, 1); problem.x0(1) = 1;
 % problem.n = length(problem.x0);
 
-problem.name = 'P12_Genhumps_5';
-problem.x0 = 506.2 * ones(5, 1); problem.x0(1) = -problem.x0(1);
-problem.n = length(problem.x0);
+% problem.name = 'P12_Genhumps_5';
+% problem.x0 = 506.2 * ones(5, 1); problem.x0(1) = -problem.x0(1);
+% problem.n = length(problem.x0);
 
 
 % Set method to solve the given problem.
@@ -88,7 +88,7 @@ options.delta = 10;
 % Delta for Datafit
 % options.delta = 0.1;
 
-% Run the solver to return x*, f* and the CPU computation time in seconds.
+% Run the solver to return x*, f*, number of function and gradient evaluations, and the CPU computation time in seconds.
 tic
 [x,f,n_f,n_g] = optSolver_Northwood(problem, method, options);
 toc

@@ -5,7 +5,7 @@
 
 function [x_new, f_new, g_new, Hest_new, d, alpha, num_func_evals, num_grad_evals] = DFPStep(x, f, g, Hest, problem, method, options, k)
 
-d = -Hest*g;            % Search direction based on the Hessian estimate
+d = -Hest*g;            % Search direction based on the inverse Hessian estimate
 
 % General parameters for a line search.
 abar = 1;

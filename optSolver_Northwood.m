@@ -72,7 +72,7 @@ while (k < options.max_iterations) && (norm_g > options.term_tol*max(1, norm_g_i
     k = k+1                    % Increment iteration counter.
 end
 
-gradPlot(gplot, k);             % Function for plotting gradient norm vs iterations
+gradPlot(gplot, k, 1);             % Function for plotting gradient norm vs iterations
 if isfield(problem, 'fstar')
     optPlot(fplot, fstar, k);   % Function for plotting optimality gap vs iterations, if optimal function value is known
 end

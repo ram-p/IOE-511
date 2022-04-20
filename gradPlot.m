@@ -2,8 +2,8 @@
 % Inputs: Gradient norm vector (gplot), final iteration number (k).
 % Code written by Northwood Team.
 
-function gradPlot(gplot, k)
-    figure
+function gradPlot(gplot, k, figindex)
+    figure(figindex);
     semilogy(1:k, gplot(1:k), 'LineWidth', 2)
     % Various plot options: Axis labels, grid, font size and typeface.
     xlabel('Iterations $k$', 'Interpreter', 'latex')

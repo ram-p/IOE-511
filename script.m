@@ -36,9 +36,9 @@ addpath(genpath('Methods'))
 % theta = 7*pi/18; problem.x0 = [cos(theta); sin(theta); cos(theta); sin(theta)];
 % problem.n = length(problem.x0);
 
-problem.name = 'P7_Rosenbrock_2';
-problem.x0 = [-1.2; 1];
-problem.n = length(problem.x0);
+% problem.name = 'P7_Rosenbrock_2';
+% problem.x0 = [-1.2; 1];
+% problem.n = length(problem.x0);
 
 % problem.name = 'P8_Rosenbrock_100';
 % problem.x0 = ones(100, 1);
@@ -57,16 +57,16 @@ problem.n = length(problem.x0);
 % problem.x0 = zeros(100, 1); problem.x0(1) = 1;
 % problem.n = length(problem.x0);
 
-% problem.name = 'P12_Genhumps_5';
-% problem.x0 = 506.2 * ones(5, 1); problem.x0(1) = -problem.x0(1);
-% problem.n = length(problem.x0);
+problem.name = 'P12_Genhumps_5';
+problem.x0 = 506.2 * ones(5, 1); problem.x0(1) = -problem.x0(1);
+problem.n = length(problem.x0);
 
 
 % Set method to solve the given problem.
 % method.name = 'GradientDescent';
-% method.name = 'Newton';
+method.name = 'Newton';
 % method.name = 'BFGS';
-method.name = 'DFP';
+% method.name = 'DFP';
 % method.name = 'TRNewtonCG';
 % method.name = 'TRSR1CG';
 method.options.step_type = 'Wolfe';
@@ -85,10 +85,30 @@ options.beta = 1e-6;
 options.eps = 1e-6;
 options.delta = 10;
 
-% Delta for Datafit
-% options.delta = 0.1;
+% Multiplication factor in the Cholesky subroutine. Defaults to 2
+options.nu = 2;
 
 % Run the solver to return x*, f*, number of function and gradient evaluations, and the CPU computation time in seconds.
 tic
 [x,f,n_f,n_g] = optSolver_Northwood(problem, method, options);
 toc
+
+% gca
+% hold on;
+% 
+% % Multiplication factor in the Cholesky subroutine. Defaults to 2
+% options.nu = 1.5;
+% 
+% tic
+% [x,f,n_f,n_g] = optSolver_Northwood(problem, method, options);
+% toc
+% 
+% % Multiplication factor in the Cholesky subroutine. Defaults to 2
+% options.nu = 10;
+% 
+% tic
+% [x,f,n_f,n_g] = optSolver_Northwood(problem, method, options);
+% toc
+% 
+% gca;
+% legend(["nu=2", "nu=1.5", "nu=10"])

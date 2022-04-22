@@ -6,7 +6,7 @@
 function [x_new,f_new,g_new,H_new,d,alpha,num_grad_evals,num_func_evals] = NewtonStep(x,f,g,H,problem,method,options, k)
 
 % Algorithm to compute modified search direction using the modified Hessian H + eta.I
-R = CholeskySubroutine(problem.n, H);  % Returning the result of factorizing H + eta.I
+R = CholeskySubroutine(problem.n, H, options.beta);  % Returning the result of factorizing H + eta.I
 d = -R\(R'\g);                                  % Search direction d based on the modified Hessian
 
 % General parameters for a line search.
@@ -63,4 +63,5 @@ switch method.options.step_type
         error('Please check step type')
 
 end
+
 end

@@ -36,9 +36,9 @@ addpath(genpath('Methods'))
 % theta = 7*pi/18; problem.x0 = [cos(theta); sin(theta); cos(theta); sin(theta)];
 % problem.n = length(problem.x0);
 
-% problem.name = 'P7_Rosenbrock_2';
-% problem.x0 = [-1.2; 1];
-% problem.n = length(problem.x0);
+problem.name = 'P7_Rosenbrock_2';
+problem.x0 = [-1.2; 1];
+problem.n = length(problem.x0);
 
 % problem.name = 'P8_Rosenbrock_100';
 % problem.x0 = ones(100, 1);
@@ -57,9 +57,9 @@ addpath(genpath('Methods'))
 % problem.x0 = zeros(100, 1); problem.x0(1) = 1;
 % problem.n = length(problem.x0);
 
-problem.name = 'P12_Genhumps_5';
-problem.x0 = 506.2 * ones(5, 1); problem.x0(1) = -problem.x0(1);
-problem.n = length(problem.x0);
+% problem.name = 'P12_Genhumps_5';
+% problem.x0 = 506.2 * ones(5, 1); problem.x0(1) = -problem.x0(1);
+% problem.n = length(problem.x0);
 
 
 % Set method to solve the given problem.
@@ -86,31 +86,61 @@ options.eps = 1e-6;
 options.delta = 10;
 
 % Multiplication factor in the Cholesky subroutine. Defaults to 2
-% options.nu = 2;
-% Direct modification to the Hessian. Defaults to 0
-% options.lambda = 0;
+options.nu = 2;
 
-% Run the solver to return x*, f*, number of function and gradient evaluations, and the CPU computation time in seconds.
-tic
-[x,f,n_f,n_g] = optSolver_Northwood(problem, method, options);
-toc
 
-% gca
-% hold on;
-% 
-% % Direct modification to the Hessian. Defaults to 0
-% options.lambda = 2;
-% 
+% lambdas = [0, 100, 200, 300, 500, 700, 1000];
+% l = length(lambdas);
+leg = [];
+solve_times = [];
+solve_iters = [];
+lambdas = [];
+
+for i = 1:50
+    lambda = 20*i;
+    lambdas = [lambdas; lambda];
+    options.lambda = lambdas(i);
+    disp("Lambda="+lambdas(i))
+    tic
+    [x,f,n_f,n_g,eigvals, k] = optSolver_Northwood(problem, method, options);
+    solve_time = toc;
+    solve_times = [solve_times; solve_time];
+    solve_iters = [solve_iters; k];
+
+    if i == 1
+        gca;
+        hold on;
+    end
+    leg = [leg, "$\lambda = $" + options.lambda];
+end
+
+% method.name = 'GradientDescent';
+% method.options.step_type = 'Wolfe';
+% disp("GradientDescent")
 % tic
-% [x,f,n_f,n_g] = optSolver_Northwood(problem, method, options);
+% [x,f,n_f,n_g,eigvals] = optSolver_Northwood(problem, method, options);
 % toc
-% 
-% % Direct modification to the Hessian. Defaults to 0
-% options.lambda = 5;
-% 
-% tic
-% [x,f,n_f,n_g] = optSolver_Northwood(problem, method, options);
-% toc
-% 
-% gca;
-% legend(["lambda=0", "lambda=2", "lambda=5"])
+% leg = [leg, "Gradient Descent"];
+
+figure(1);
+legend(leg, 'Interpreter', 'latex')
+
+figure(2);
+legend(leg)
+legend(leg, 'Interpreter', 'latex')
+
+figure;
+subplot(1, 2, 1)
+plot(lambdas, solve_times, 'LineWidth', 2);
+xlabel('$\lambda$', 'Interpreter', 'latex')
+ylabel('CPU Time to solve (s)', 'Interpreter', 'latex')
+grid on
+set(gca, 'FontName', 'Times New Roman', 'FontSize', 16)
+
+subplot(1, 2, 2)
+plot(lambdas, solve_iters, 'LineWidth', 2);
+xlabel('$\lambda$', 'Interpreter', 'latex')
+ylabel('Iterations to solve', 'Interpreter', 'latex')
+grid on
+set(gca, 'FontName', 'Times New Roman', 'FontSize', 16)
+

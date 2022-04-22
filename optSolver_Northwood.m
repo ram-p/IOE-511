@@ -3,7 +3,7 @@
 % Outputs: Final iteration (x) and final function value (f).
 % Code written by Northwood Team.
 
-function [x,f,n_f,n_g] = optSolver_Northwood(problem,method,options)
+function [x,f,n_f,n_g,eigvals,k] = optSolver_Northwood(problem,method,options)
 
 % Set problem, method and options.
 [problem] = setProblem(problem);
@@ -32,15 +32,19 @@ n_f = 0;
 n_g = 0;
 delta = options.delta;
 
+eigvals = [];
+
 while (k < options.max_iterations) && (norm_g > options.term_tol*max(1, norm_g_init))    % Termination condition
     % Take a step based on the chosen method.
     switch method.name
         case 'GradientDescent'
             [x_new,f_new,g_new,d,alpha,num_func_evals,num_grad_evals] = GDStep(x,f,g,problem,method,options);
         case 'Newton'
-            [x_new,f_new,g_new,H_new,d,alpha,num_func_evals,num_grad_evals] = NewtonStep(x, f, g, H, problem, method, options, k);
+            [x_new,f_new,g_new,H_new,d,alpha,num_func_evals,num_grad_evals, eigval] = NewtonStep(x, f, g, H, problem, method, options, k);
             % Update Hessian now as it's specific to Newton's method
             H_old = H; H = H_new;
+            % Append the eigenvalues
+            eigvals = [eigvals; eigval];
         case 'BFGS'
             [x_new, f_new, g_new, Hest_new, d, alpha,num_func_evals,num_grad_evals] = BFGSStep(x, f, g, Hest, problem, method, options, k);
             % Update Hessian estimate now, as it's specific to BFGS
@@ -74,7 +78,7 @@ end
 
 gradPlot(gplot, k, 1);             % Function for plotting gradient norm vs iterations
 if isfield(problem, 'fstar')
-    optPlot(fplot, fstar, k);   % Function for plotting optimality gap vs iterations, if optimal function value is known
+    optPlot(fplot, fstar, k, 2);   % Function for plotting optimality gap vs iterations, if optimal function value is known
 end
 
 end

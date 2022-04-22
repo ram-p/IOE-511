@@ -3,10 +3,9 @@
 % Outputs: R
 % Code written by Northwood Team.
 
-function R = CholeskySubroutine(n, H, options)
+function R = CholeskySubroutine(n, H)
 
 beta = options.beta;
-nu = options.nu;
 
 [R, flag] = chol(H);        % Checking if H is positive definite using flag
 
@@ -22,8 +21,7 @@ while flag ~= 0
     [R, flag] = chol(H + eta*eye(n));
     
     % Changed to have a variable multiplication factor
-    eta = max(nu*eta, beta);
-    disp(eta)
+    eta = max(2*eta, beta);
 end
 
 % if eta ~= 0

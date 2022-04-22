@@ -86,7 +86,9 @@ options.eps = 1e-6;
 options.delta = 10;
 
 % Multiplication factor in the Cholesky subroutine. Defaults to 2
-options.nu = 2;
+% options.nu = 2;
+% Direct modification to the Hessian. Defaults to 0
+% options.lambda = 0;
 
 % Run the solver to return x*, f*, number of function and gradient evaluations, and the CPU computation time in seconds.
 tic
@@ -96,19 +98,19 @@ toc
 % gca
 % hold on;
 % 
-% % Multiplication factor in the Cholesky subroutine. Defaults to 2
-% options.nu = 1.5;
+% % Direct modification to the Hessian. Defaults to 0
+% options.lambda = 2;
 % 
 % tic
 % [x,f,n_f,n_g] = optSolver_Northwood(problem, method, options);
 % toc
 % 
-% % Multiplication factor in the Cholesky subroutine. Defaults to 2
-% options.nu = 10;
+% % Direct modification to the Hessian. Defaults to 0
+% options.lambda = 5;
 % 
 % tic
 % [x,f,n_f,n_g] = optSolver_Northwood(problem, method, options);
 % toc
 % 
 % gca;
-% legend(["nu=2", "nu=1.5", "nu=10"])
+% legend(["lambda=0", "lambda=2", "lambda=5"])

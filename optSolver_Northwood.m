@@ -66,10 +66,10 @@ while (k < options.max_iterations) && (norm_g > options.term_tol*max(1, norm_g_i
     
     % Update old and new iterates, function values, gradients and gradient norms.
     x_old = x; f_old = f; g_old = g; norm_g_old = norm_g;
-    x = x_new; f = f_new; g = g_new; norm_g = norm(g,inf)
+    x = x_new; f = f_new; g = g_new; norm_g = norm(g,inf);
     fplot(k+1) = f_old;         % Append the function value to the fplot vector.
     gplot(k+1) = norm_g_old;    % Append the gradient norm to the gplot vector.
-    k = k+1                    % Increment iteration counter.
+    k = k+1;                    % Increment iteration counter.
 end
 
 gradPlot(gplot, k, 1);             % Function for plotting gradient norm vs iterations

@@ -46,7 +46,5 @@ while true
     p = p_new;
     z = z_new;
     r = r_new;
-
 end
 end
-

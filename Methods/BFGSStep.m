@@ -1,69 +1,89 @@
-% IOE 511/MATH 562, University of Michigan
-% Code written by: Shreyas Bhat
+% Function that runs one step of BFGS on the chosen problem.
+% Inputs: x, f, g, Hest, problem, method, options, k
+% Outputs: x_new, f_new, g_new, Hest_new, d, alpha
+% Code written by Northwood Team.
 
-% Function that: (1) computes the Newton step; (2) updates the iterate; and, 
-%                (3) computes the function and gradient at the new iterate
-% 
-%           Inputs: x, f, g, H, problem, method, options
-%           Outputs: x_new, f_new, g_new, H_new, d, alpha
-%
-function [x_new,f_new,g_new, H_new,d,alpha, skipped] = BFGSStep(x,f,g,H,problem,method,options)
+function [x_new, f_new, g_new, Hest_new, d, alpha, num_func_evals, num_grad_evals] = BFGSStep(x, f, g, Hest, problem, method, options, k)
 
-d = -H*g;
+d = -Hest*g;            % Search direction based on the inverse Hessian estimate
 
-% determine step size
+% General parameters for a line search.
+abar = 1;
+c1 = options.c1_ls;
+c2 = options.c2_ls;
+
+eps = options.eps;      % Tolerance to determine whether Hessian estimate must be updated.
+
+num_func_evals = 0;
+num_grad_evals = 0;
+
+% Determining step size, depending on the type of line search.
 switch method.options.step_type
     case 'Backtracking'
-        alpha_bar = options.alpha_bar;
-        rho = options.rho;
-        c1 = options.c1;
-        alpha = alpha_bar;
-        while problem.compute_f(x+alpha*d) > f + c1*alpha*g'*d
-           alpha = alpha*rho;
+        tau = 0.5;      % Backtracking parameter
+        num_func_evals = num_func_evals + 1;
+        while (problem.compute_f(x + abar*d)) > (f + c1*abar*g'*d)       % Condition to continue backtracking
+            abar = tau*abar;                        % Backtracking update
+            num_func_evals = num_func_evals + 1;
+        end
+        alpha = abar;                               % Set step size when the Armijo condition has been satisfied
+        x_new = x + alpha*d;                        % Iterate update
+        f_new = problem.compute_f(x_new);           % New function value
+        num_func_evals = num_func_evals + 1;
+        g_new = problem.compute_g(x_new);           % New gradient value
+        num_grad_evals = num_grad_evals + 1;
+
+        s = x_new - x; y = g_new - g;               % Curvature Pairs
+        % Condition to check if Hessian must be updated
+        if s'*y < eps*norm(s)*norm(y)
+            Hest_new = Hest;
+            %             disp("Skipped at iteration " + k)
+        else
+            I = eye(problem.n);
+            % Hessian update
+            V = (I - (s*y')/(s'*y));
+            Hest_new = V*Hest*V' + (s*s')/(s'*y);
         end
     case 'Wolfe'
-%         abar = 1; c1 = 1e-4; c2 = 0.9; alow = 0; ahi = 1000; c = 0.5; eps = 1e-6;       % Parameters for the weak Wolfe line search
-        alpha_bar = options.alpha_bar;
-        c1 = options.c1;
-        c2 = options.c2;
-        alow = options.alow;
-        ahi = options.ahi;
-        c = options.c;
-        
-        alpha = alpha_bar;
+        alow = 0; ahi = 1000; c = 0.5;      % Parameters for the weak Wolfe line search.
         while true
-            if (problem.compute_f(x + alpha*d)) <= f + c1*alpha*g'*d)
-                if (problem.compute_g(x + alpha*d)'*d >= c2*g'*d)
+            num_func_evals = num_func_evals + 1;
+            if (problem.compute_f(x + abar*d)) <= (f + c1*abar*g'*d)     % First Wolfe condition
+                num_grad_evals = num_grad_evals + 1;
+                if (problem.compute_g(x + abar*d)'*d >= c2*g'*d)         % Second Wolfe condition
+                    % Step size set if both conditions are satisfied, and break.
+                    alpha = abar;
                     break
                 end
             end
-            if (problem.compute_f(x + alpha*d)) <= (f + c1*alpha*g'*d)
-                alow = alpha;
+            % Set low and high thresholds for abar, depending on whether the first condition is satisfied.
+            num_func_evals = num_func_evals + 1;
+            if (problem.compute_f(x + abar*d)) <= (f + c1*abar*g'*d)
+                alow = abar;
             else
-                ahi = alpha;
+                ahi = abar;
             end
-            alpha = c*alow + (1-c)*ahi;
+            abar = c*alow + (1-c)*ahi;              % A combination of the low and high thresholds.
         end
+        x_new = x + alpha*d;                        % Iterate update
+        f_new = problem.compute_f(x_new);           % New function value
+        num_func_evals = num_func_evals + 1;
+        g_new = problem.compute_g(x_new);           % New gradient value
+        num_grad_evals = num_grad_evals + 1;
+
+        s = x_new - x; y = g_new - g;               % Curvature pairs
+        % Condition to check if Hessian must be updated
+        if s'*y < eps*norm(s)*norm(y)
+            Hest_new = Hest;
+            %             disp("Skipped at iteration " + k)
+        else
+            I = eye(problem.n);
+            % Hessian update
+            V = (I - (s*y')/(s'*y));
+            Hest_new = V*Hest*V' + (s*s')/(s'*y);
+        end
+     otherwise
+        error('Please check step type')
+
 end
-
-x_new = x+alpha*d;
-f_new = problem.compute_f(x_new);
-g_new = problem.compute_g(x_new);
-
-s_new = x_new - x;
-y_new = g_new - g;
-
-inner_prod = s_new'*y_new;
-
-if inner_prod <= options.eps * norm(s_new) * norm(y_new)
-    H_new = H;
-    skipped = true;
-else
-    skipped = false;
-    I_ = eye(length(x));
-    V = (I_ - s_new * y_new'/inner_prod);
-    H_new = V * H * V' + s_new * s_new' / inner_prod;
 end
-
-end
-

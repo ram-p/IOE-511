@@ -1,60 +1,66 @@
-% IOE 511/MATH 562, University of Michigan
-% Code written by: Batman
+% Function that runs one step of Newton's method on the chosen problem.
+% Inputs: x, f, g, H, problem, method, options, k
+% Outputs: x_new, f_new, g_new, H_new, d, alpha
+% Code written by Northwood Team.
 
-% Function that: (1) computes the GD step; (2) updates the iterate; and,
-%                (3) computes the function and gradient at the new iterate
-%
-%           Inputs: x, f, g, problem, method, options
-%           Outputs: x_new, f_new, g_new, d, alpha
-%
-function [x_new,f_new,g_new,H_new,d,alpha] = NewtonStep(x,f,g,H,problem,method,options, k)
+function [x_new,f_new,g_new,H_new,d,alpha,num_grad_evals,num_func_evals] = NewtonStep(x,f,g,H,problem,method,options, k)
 
-% Algorithm to compute modified search direction using H + eta.I
-beta = options.beta;                        % Beta
-R = CholeskySubroutine(H, beta);               % Returning the result of factorizing H + eta.I
-% Search direction d = -(R'R)\g;
-d = -R\(R'\g);
+% Algorithm to compute modified search direction using the modified Hessian H + eta.I
+R = CholeskySubroutine(problem.n, H);  % Returning the result of factorizing H + eta.I
+d = -R\(R'\g);                                  % Search direction d based on the modified Hessian
 
-% determine step size
+% General parameters for a line search.
+abar = 1;
+c1 = options.c1_ls;
+c2 = options.c2_ls;
+num_func_evals = 0;
+num_grad_evals = 0;
+
+% Determining step size, depending on the type of line search.
 switch method.options.step_type
     case 'Backtracking'
-        alpha_bar = options.alpha_bar;
-        rho = options.rho;
-        c1 = options.c1;
-        alpha = alpha_bar;
-
-        while (problem.compute_f(x + alpha * d)) > f + c1*alpha*g'*d       % Condition to continue backtracking
-            alpha = alpha*rho;                        % Backtracking update
+        tau = 0.5;      % Backtracking parameter
+        num_func_evals = num_func_evals + 1;
+        while (problem.compute_f(x + abar*d)) > (f + c1*abar*g'*d)       % Condition to continue backtracking
+            abar = tau*abar;                        % Backtracking update
+            num_func_evals = num_func_evals + 1;
         end
-        
+        alpha = abar;                               % Set step size when the Armijo condition has been satisfied
+        x_new = x + alpha*d;                        % Iterate update
+        f_new = problem.compute_f(x_new);           % New function value
+        num_func_evals = num_func_evals + 1;
+        g_new = problem.compute_g(x_new);           % New gradient value
+        num_grad_evals = num_grad_evals + 1;
+        H_new = problem.compute_H(x_new);           % New Hessian value
     case 'Wolfe'
-%         abar = 1; c1 = 1e-4; c2 = 0.9; alow = 0; ahi = 1000; c = 0.5; eps = 1e-6;       % Parameters for the weak Wolfe line search
-        alpha_bar = options.alpha_bar;
-        c1 = options.c1;
-        c2 = options.c2;
-        alow = options.alow;
-        ahi = options.ahi;
-        c = options.c;
-        
-        alpha = alpha_bar;
+        alow = 0; ahi = 1000; c = 0.5;      % Parameters for the weak Wolfe line search.
         while true
-            if (problem.compute_f(x + alpha*d)) <= f + c1*alpha*g'*d)
-                if (problem.compute_g(x + alpha*d)'*d >= c2*g'*d)
+            num_func_evals = num_func_evals + 1;
+            if (problem.compute_f(x + abar*d)) <= (f + c1*abar*g'*d)     % First Wolfe condition
+                num_grad_evals = num_grad_evals + 1;
+                if (problem.compute_g(x + abar*d)'*d >= c2*g'*d)         % Second Wolfe condition
+                    % Step size set if both conditions are satisfied, and break.
+                    alpha = abar;
                     break
                 end
             end
-            if (problem.compute_f(x + alpha*d)) <= (f + c1*alpha*g'*d)
-                alow = alpha;
+            % Set low and high thresholds for abar, depending on whether the first condition is satisfied.
+            num_func_evals = num_func_evals + 1;
+            if (problem.compute_f(x + abar*d)) <= (f + c1*abar*g'*d)
+                alow = abar;
             else
-                ahi = alpha;
+                ahi = abar;
             end
-            alpha = c*alow + (1-c)*ahi;
+            abar = c*alow + (1-c)*ahi;              % A combination of the low and high thresholds.
         end
+        x_new = x + alpha*d;                        % Iterate update
+        f_new = problem.compute_f(x_new);           % New function value
+        num_func_evals = num_func_evals + 1;
+        g_new = problem.compute_g(x_new);           % New gradient value
+        num_grad_evals = num_grad_evals + 1;
+        H_new = problem.compute_H(x_new);           % New Hessian value
+    otherwise
+        error('Please check step type')
+
 end
-
-    x_new = x + alpha*d;                        % Iterate update
-    f_new = problem.compute_f(x_new);           % New function value
-    g_new = problem.compute_g(x_new);           % New gradient value
-    H_new = problem.compute_H(x_new);           % New Hessian value
-
 end

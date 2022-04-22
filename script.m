@@ -1,73 +1,116 @@
-% IOE 511/MATH 562, University of Michigan
-% Code written by: Shreyas Bhat
+% Main script file to run code.
+% Code written by Northwood Team.
 
-% Script to run code
-
-% close all figures, clear all variables from workspace and clear command
-% window
+% Close all figures, clear all variables from workspace, clear the command window and improve appearance.
 close all
-clear all
+clear
 clc
-
-% constants
-alpha_bar = 1;
-c1 = 1e-4;
-rho = 0.5;
-max_iters = 1000;
-term_tol = 1e-6;
-beta = 1e-6;
-eps = 1e-6;
-
-% Trust region constants
-c1_tr = 1e-3;
-c2_tr = 0.5;
-term_tol_CG = 1e-6;
-max_iterations_CG = 1000;
-delta_0 = 1.0;
-
-% Add paths with the functions
-addpath(genpath('./Functions'))
-
-%% Part 0: Example of running the solver
-
 format compact
 
+% Add required folders to the current Matlab path.
 addpath(genpath('Functions'))
 addpath(genpath('Methods'))
 
-% set problem (minimal requirement: name of problem)
-% problem.name = 'P7_Rosenbrock_2';
-% problem.x0 = [-1.2; ones(1, 1)];
+% Set problem name and initial condition.
+% problem.name = 'P1_quad_10_10';
+% rng(0); problem.x0 = 20*rand(10, 1) - 10;
 % problem.n = length(problem.x0);
 
-problem.name = 'P1_quad_10_10';
-rng(0); x0 = 20*rand(10,1)-10;
-problem.x0 = x0;
+% problem.name = 'P2_quad_10_1000';
+% rng(0); problem.x0 = 20*rand(10, 1) - 10;
+% problem.n = length(problem.x0);
+ 
+% problem.name = 'P3_quad_1000_10';
+% rng(0); problem.x0 = 20*rand(1000, 1) - 10;
+% problem.n = length(problem.x0);
+
+% problem.name = 'P4_quad_1000_1000';
+% rng(0); problem.x0 = 20*rand(1000, 1) - 10;
+% problem.n = length(problem.x0);
+
+% problem.name = 'P5_Quartic_1';
+% theta = 7*pi/18; problem.x0 = [cos(theta); sin(theta); cos(theta); sin(theta)];
+% problem.n = length(problem.x0);
+
+% problem.name = 'P6_Quartic_2';
+% theta = 7*pi/18; problem.x0 = [cos(theta); sin(theta); cos(theta); sin(theta)];
+% problem.n = length(problem.x0);
+
+% problem.name = 'P7_Rosenbrock_2';
+% problem.x0 = [-1.2; 1];
+% problem.n = length(problem.x0);
+
+% problem.name = 'P8_Rosenbrock_100';
+% problem.x0 = ones(100, 1);
+% problem.x0(1) = -1.2;
+% problem.n = length(problem.x0);
+
+% problem.name = 'P9_DataFit_2';
+% problem.x0 = [1; 1];
+% problem.n = length(problem.x0);
+
+% problem.name = 'P10_Exponential_10';
+% problem.x0 = zeros(10, 1); problem.x0(1) = 1;
+% problem.n = length(problem.x0);
+
+% problem.name = 'P11_Exponential_100';
+% problem.x0 = zeros(100, 1); problem.x0(1) = 1;
+% problem.n = length(problem.x0);
+
+problem.name = 'P12_Genhumps_5';
+problem.x0 = 506.2 * ones(5, 1); problem.x0(1) = -problem.x0(1);
 problem.n = length(problem.x0);
 
-% set method (minimal requirement: name of method)
-method.name = 'TRNewtonCG';
-% method.name = 'Newton';
+
+% Set method to solve the given problem.
+% method.name = 'GradientDescent';
+method.name = 'Newton';
+% method.name = 'BFGS';
+% method.name = 'DFP';
+% method.name = 'TRNewtonCG';
 % method.name = 'TRSR1CG';
 method.options.step_type = 'Wolfe';
-method.options.delta = delta_0;
+% method.options.step_type = 'Backtracking';
 
-% set options
-options.term_tol = term_tol;
-options.max_iterations = max_iters;
-options.alpha_bar = alpha_bar;
-options.rho = rho;
-options.c1 = c1;
-options.beta = beta;
-options.eps = eps;
-options.track = false;
-options.c_1_tr = c1_tr;
-options.c_2_tr = c2_tr;
-options.term_tol_CG = term_tol_CG;
+% Set different constants.
+options.term_tol = 1e-6;
+options.max_iterations = 1e3;
+options.c1_ls = 1e-3;
+options.c2_ls = 0.9;
+options.c1_tr = 1e-3;
+options.c2_tr = 0.5;
+options.term_tol_CG = 1e-6;
+options.max_iterations_CG = 1e3;
+options.beta = 1e-6;
+options.eps = 1e-6;
+options.delta = 10;
 
-% NOT CURRENTLY USED. MIGHT HAVE TO USE THIS IN THE SOLVER
-options.max_iterations_CG = max_iterations_CG;
+% Multiplication factor in the Cholesky subroutine. Defaults to 2
+% options.nu = 2;
+% Direct modification to the Hessian. Defaults to 0
+% options.lambda = 0;
 
+% Run the solver to return x*, f*, number of function and gradient evaluations, and the CPU computation time in seconds.
 tic
-[x,f] = optSolver_Northwood(problem, method, options);
+[x,f,n_f,n_g] = optSolver_Northwood(problem, method, options);
 toc
+
+% gca
+% hold on;
+% 
+% % Direct modification to the Hessian. Defaults to 0
+% options.lambda = 2;
+% 
+% tic
+% [x,f,n_f,n_g] = optSolver_Northwood(problem, method, options);
+% toc
+% 
+% % Direct modification to the Hessian. Defaults to 0
+% options.lambda = 5;
+% 
+% tic
+% [x,f,n_f,n_g] = optSolver_Northwood(problem, method, options);
+% toc
+% 
+% gca;
+% legend(["lambda=0", "lambda=2", "lambda=5"])

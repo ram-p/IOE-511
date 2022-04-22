@@ -64,12 +64,12 @@ problem.n = length(problem.x0);
 
 % Set method to solve the given problem.
 % method.name = 'GradientDescent';
-method.name = 'Newton';
+% method.name = 'Newton';
 % method.name = 'BFGS';
 % method.name = 'DFP';
 % method.name = 'TRNewtonCG';
-% method.name = 'TRSR1CG';
-method.options.step_type = 'Wolfe';
+method.name = 'TRSR1CG';
+% method.options.step_type = 'Wolfe';
 % method.options.step_type = 'Backtracking';
 
 % Set different constants.

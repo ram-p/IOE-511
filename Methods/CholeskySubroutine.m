@@ -3,9 +3,7 @@
 % Outputs: R
 % Code written by Northwood Team.
 
-function R = CholeskySubroutine(n, H)
-
-beta = options.beta;
+function R = CholeskySubroutine(n, H, beta)
 
 [R, flag] = chol(H);        % Checking if H is positive definite using flag
 

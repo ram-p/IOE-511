@@ -3,7 +3,7 @@
 % Outputs: Final iteration (x) and final function value (f).
 % Code written by Northwood Team.
 
-function [x,f,n_f,n_g] = optSolver_Northwood(problem,method,options)
+function [x,f] = optSolver_Northwood(problem,method,options)
 
 % Set problem, method and options.
 [problem] = setProblem(problem);
@@ -71,6 +71,11 @@ while (k < options.max_iterations) && (norm_g > options.term_tol*max(1, norm_g_i
     gplot(k+1) = norm_g_old;    % Append the gradient norm to the gplot vector.
     k = k+1;                    % Increment iteration counter.
 end
+
+% Printing number of iterations, function evaluations and gradient evaluations
+disp("Number of iterations: " + k)
+disp("Number of function evaluations: " + n_f)
+disp("Number of gradient evaluations: " + n_g)
 
 gradPlot(gplot, k, 1);             % Function for plotting gradient norm vs iterations
 if isfield(problem, 'fstar')

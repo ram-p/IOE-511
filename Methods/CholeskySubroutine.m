@@ -22,8 +22,4 @@ while flag ~= 0
     eta = max(2*eta, beta);
 end
 
-% if eta ~= 0
-%     disp("Hessian modified in iteration " + k + ". Eta = " + eta)
-% end
-
 end

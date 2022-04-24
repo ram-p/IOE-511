@@ -1,11 +1,9 @@
-% IOE 511/MATH 562, University of Michigan
-% Code written by: Batman
-
 % Function that computes the gradient of the Rosenbrock function
 %
 %           Input: x
-%           Output: nabla f(x)
-%
+%           Output: f(x)
+% Code written by Northwood Team
+
 function [g] = rosenbrock_100_grad(x)
 
 g = zeros(length(x), 1);
